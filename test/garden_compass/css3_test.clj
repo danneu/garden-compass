@@ -250,6 +250,10 @@
          :opacity 1}
         (opaque))
 
+(expect {:opacity 1}
+        (binding [*options* {:support-for-ie false}]
+          (opaque)))
+
 ;; compass/css3/Shared Utilities ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; compass/css3/Text Shadow ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; compass/css3/Transform ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -8,7 +8,7 @@
              (fn [& args]
                (CSSFunction. fn-name args))))
 
-;; Utils ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Utils ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn merge-with-set
   "Merges maps but concats the values of dupe keys into sets.
@@ -47,7 +47,7 @@
    :experimental-support-for-microsoft :-ms
    :experimental-support-for-opera     :-o})
 
-;; Compass: Support ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Compass: Support ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn ie-options
   ([] (ie-options {}))
@@ -69,7 +69,7 @@
                                           legacy-support-for-ie8
                                           base)}))))
 
-;; Options ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Options ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn build-options
   ([] (build-options {}))
@@ -110,7 +110,7 @@
        (remove nil?)
        (set)))
 
-;; Compass API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Compass API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; compass/css3/shared
 
@@ -318,12 +318,27 @@
   (let [arg (str "Opacity=" opacity)]
     ((cssfn "progid:DXImageTransform.Microsoft.Alpha") arg)))
 
+;; Diverges from Compass:
+;;
+;; Compass checks for
+;; (or :legacy-support-for-ie6 true
+;;     :legacy-support-for-ie7 true
+;;     :legacy-support-for-ie8 true)
+;;
+;; However, setting any of those will automatically set
+;; :legacy-support-for-ie to true anyways.
+;;
+;; If garden-compass users always merge their custom options
+;; using the `(build-options [map])` function, then the state
+;; of *options* will always be reliable and we don't need
+;; to do the piecewise checks that Compass must do.
 (defn opacity
   "Opacity 0.0-1.0"
   [opacity]
   (merge {:opacity opacity}
-         {:filter (when (:legacy-support-for-ie *options*)
-                    (microsoft-alpha (int (* 100 opacity))))}))
+         (when (:legacy-support-for-ie *options*)
+           {:filter
+            (microsoft-alpha (int (* 100 opacity)))})))
 
 (defn transparent []
   (opacity 0))
