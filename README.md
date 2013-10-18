@@ -1,44 +1,36 @@
 # garden-compass
 
-A port of [Compass](http://compass-style.org/) to Clojure datastructures for use with [Garden](https://github.com/noprompt/garden).
+A port of [Compass](http://compass-style.org/) to Clojure for use with [Garden](https://github.com/noprompt/garden).
 
-## Implementation
+Namespaces:
 
-My idea so far is to round up all of Compass' scattered variables into a single dynamic-var `*options*` map that mixins can see.
+    garden-compass.css3
+    garden-compass.helpers
+    garden-compass.layout
+    garden-compass.reset
+    garden-compass.typography
+    graden-compass.utilities
 
-``` clojure
-(css [:div
-      [:&
-       {:color "white"}
-       (opacity 0)]])
-; div {
-;   color: white;
-;   opacity: 0;
-;   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-; }
-```
+## Progress
 
-And customizations can be made by rebinding `*options*`:
+It's mostly unorganized/naive experimentation to feel things out since I did not know how to best organize it as I was writing it.
 
-``` clojure
-(def ^:dynamic *options*
-  (build-options {:legacy-support-for-ie false
-                  :default-border-radius "5px"
-                  :inline-block-alignment :middle}))
-```
+I have some better ideas now and nothing is set in stone.
 
-Or perhaps only temporarily:
+## Goals
 
-``` clojure
-(binding [*options* (build-options {:legacy-support-for-ie false})]
-  (css [:div
-        [:&
-         {:color "white"}
-         (opacity 0)]]))
-; div {
-;   color: white;
-;   opacity: 0;
-; }
-```
+- Expose an API as similar to Compass as possible.
+- Map namespace and variable names to Compass'.
+- Remove or improve the API cruft that only exists because of Sass limitations.
+- Reveal features that make more sense to be included in Garden.
+- Expose all config-options (like `images-path`) and css-options (like `default-padding-size`) with two central maps that are easy to work with and to override.
 
-Otherwise, `*options*` will default to Compass' default options.
+## Tests
+
+Run all tests:
+
+    lein expectations
+
+Run focused autotests:
+
+    lein autoexpect

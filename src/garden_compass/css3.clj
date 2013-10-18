@@ -47,7 +47,9 @@
    :experimental-support-for-microsoft :-ms
    :experimental-support-for-opera     :-o})
 
-;; Compass: Support ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Options ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; TODO: Extract options.
 
 (defn ie-options
   ([] (ie-options {}))
@@ -68,8 +70,6 @@
                                           legacy-support-for-ie7
                                           legacy-support-for-ie8
                                           base)}))))
-
-;; Options ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn build-options
   ([] (build-options {}))
@@ -95,7 +95,17 @@
              :default-box-flex-group 1
              :default-box-direction :normal
              :default-box-lines :single
-             :default-box-pack :start}
+             :default-box-pack :start
+
+             :contrasted-dark-default        "black"
+             :contrasted-light-default       "white"
+             :contrasted-lightness-threshold 30  ; (%)
+
+             :default-has-layout-approach :zoom
+             ;; ...
+             ;; TODO
+             ;; ...
+             }
             overrides)))
 
 (def ^:dynamic *options* (build-options))
