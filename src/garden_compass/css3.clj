@@ -328,25 +328,13 @@
   (let [arg (str "Opacity=" opacity)]
     ((cssfn "progid:DXImageTransform.Microsoft.Alpha") arg)))
 
-;; Diverges from Compass:
-;;
-;; Compass checks for
-;; (or :legacy-support-for-ie6 true
-;;     :legacy-support-for-ie7 true
-;;     :legacy-support-for-ie8 true)
-;;
-;; However, setting any of those will automatically set
-;; :legacy-support-for-ie to true anyways.
-;;
-;; If garden-compass users always merge their custom options
-;; using the `(build-options [map])` function, then the state
-;; of *options* will always be reliable and we don't need
-;; to do the piecewise checks that Compass must do.
 (defn opacity
   "Opacity 0.0-1.0"
   [opacity]
   (merge {:opacity opacity}
-         (when (:legacy-support-for-ie *options*)
+         (when (or (:legacy-support-for-ie6 *options*)
+                   (:legacy-support-for-ie7 *options*)
+                   (:legacy-support-for-ie8 *options*))
            {:filter
             (microsoft-alpha (int (* 100 opacity)))})))
 
